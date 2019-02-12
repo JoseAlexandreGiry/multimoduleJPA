@@ -41,19 +41,20 @@ import java.util.List;
         protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
             // 1. Obtenir une connection database
             EntityManagerFactory emf = (EntityManagerFactory)getServletContext().getAttribute("emf");
+            FormationService monservice = new FormationService();
             
-            FormationDAO monDAO = new FormationDAO();
             
             try {
                 // 2. Création d'une nouvelle formation ?:
                 String theme = request.getParameter("themeFormation");
                 if (theme != null) {
                 	Formation maformation = new Formation(theme);
-                	monDAO.create(emf, maformation);
+                	monservice.creerFormation(emf, maformation);
                 }
 
                 // 3. Afficher la liste des formations en Base:
-                List<Formation> listeFormations = monDAO.read(emf);
+                List<Formation> listeFormations = monservice.LireLesFormations(emf);
+                
                 request.setAttribute("listeDesFormations", listeFormations);
                 request.getRequestDispatcher("/index.jsp").forward(request, response);
 
